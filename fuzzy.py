@@ -3,26 +3,33 @@ import simpful as sf
 # Create a fuzzy system.
 FS = sf.FuzzySystem()
 
-# Define fuzzy sets for each linguistic variable.
+# Defining a list of points for each fuzzy set
+points_list = [
+    [[0., 1], [50., 1], [60., 0]],    # Points for 'low'
+    [[20., 0], [50., 1], [80., 1], [85., 0]],   # Points for 'medium'
+    [[75., 0], [90., 1], [100., 1]]   # Points for 'high'
+]
+
+# Defining fuzzy sets for each linguistic variable.
 terms = ['low', 'medium', 'high']
 
 # Linguistic variable: MemoryUsage
-mem_vars = [sf.FuzzySet(points=[[0., 1], [30., 1], [70., 0]], term=f"{terms[i]}_memory")
+mem_vars = [sf.FuzzySet(points=points_list[i], term=f"{terms[i]}_memory")
             for i in range(3)]
 FS.add_linguistic_variable("MemoryUsage", sf.LinguisticVariable(mem_vars))
 
 # Linguistic variable: ProcessorLoad
-load_vars = [sf.FuzzySet(points=[[0., 1], [30., 1], [70., 0]], term=f"{terms[i]}_load")
+load_vars = [sf.FuzzySet(points=points_list[i], term=f"{terms[i]}_load")
              for i in range(3)]
 FS.add_linguistic_variable("ProcessorLoad", sf.LinguisticVariable(load_vars))
 
 # Linguistic variable: Bandwidth
-bw_vars = [sf.FuzzySet(points=[[0., 1], [30., 1], [70., 0]], term=f"{terms[i]}_bandwidth")
+bw_vars = [sf.FuzzySet(points=points_list[i], term=f"{terms[i]}_bandwidth")
            for i in range(3)]
 FS.add_linguistic_variable("Bandwidth", sf.LinguisticVariable(bw_vars))
 
 # Linguistic variable: Latency
-lat_vars = [sf.FuzzySet(points=[[0., 1], [30., 1], [70., 0]], term=f"{terms[i]}_latency")
+lat_vars = [sf.FuzzySet(points=points_list[i], term=f"{terms[i]}_latency")
             for i in range(3)]
 FS.add_linguistic_variable("Latency", sf.LinguisticVariable(lat_vars))
 
