@@ -1,6 +1,5 @@
 import pandas as pd
 import simpful as sf
-from deap import creator
 from numpy import array, meshgrid, linspace
 from simpful import *
 from mpl_toolkits.mplot3d import Axes3D
@@ -59,10 +58,10 @@ def creating_FS():
 
 
 def rules(fs):
-    #fs.add_rules([
+    # fs.add_rules([
     #    "IF (available_bandwidth IS low) AND (latency IS high) THEN (NA IS low)",
     #    "IF (available_bandwidth IS high) AND (latency IS low) THEN (NA IS high)"
-    #])
+    # ])
     fs.add_rules([
         "IF (memory_usage_value IS increasing) AND (memory_usage IS low) THEN (predicted_memory_usage IS medium)",
         "IF (memory_usage_value IS increasing) AND (memory_usage IS medium) THEN (predicted_memory_usage IS high)",
@@ -129,8 +128,9 @@ def graphs(fs):
         plt.colorbar(v, ax=ax)
         fig.tight_layout()
         return fig
+
     # fs.plot_surface = plot_surface_edited
-    
+
     fs.plot_surface({"memory_usage_value", "memory_usage"}, "predicted_memory_usage")
 
     # fs.plot_variable("processor_load_value")
@@ -138,8 +138,16 @@ def graphs(fs):
 
 
 def results(df, FS):
-    # for i in df:
-    print(" ")
+    res = []
+    for idx, row in df.iterrows():  ##TO EDIT#################################################################
+        inputs = {'memory_usage': row['input1'], 'memory_usage_value': row['input1'], 'processor_load': row['input1'],
+                  'processor_load_value': row['input1'], 'available_bandwidth': row['input1'],
+                  'latency': row['input1'], }
+        output = FS.calculate(inputs)
+        res.append(output)
+
+    # Add the results to the DataFrame
+    df['CLPVariation'] = results
 
 
 if __name__ == '__main__':
@@ -147,4 +155,4 @@ if __name__ == '__main__':
     FS = creating_FS()
     rules(FS)
     graphs(FS)
-    results(df, FS)
+    # results(df, FS)
