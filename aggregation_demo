@@ -1,0 +1,85 @@
+import simpful as sf
+
+points_list = [
+    [[0., 1], [50., 1], [60., 0]],  # Points for 'low'
+    [[20., 0], [50., 1], [80., 1], [85., 0]],  # Points for 'medium'
+    [[75., 0], [90., 1], [100., 1]]  # Points for 'high'
+]
+
+
+# Primeiro Fuzzyset,  Hardware availability = Memory usage + Processor load  ---------------------------
+# Create a fuzzy system.
+FS = sf.FuzzySystem()
+
+# Defining fuzzy sets for each linguistic variable.
+terms = ['low', 'medium', 'high']
+
+mem_vars = [sf.FuzzySet(points=points_list[i], term=f"{terms[i]}_memory")
+            for i in range(3)]
+FS.add_linguistic_variable("MemoryUsage", sf.LinguisticVariable(mem_vars))
+
+load_vars = [sf.FuzzySet(points=points_list[i], term=f"{terms[i]}_load")
+             for i in range(3)]
+FS.add_linguistic_variable("ProcessorLoad", sf.LinguisticVariable(load_vars))
+
+FS.set_crisp_output_value("LOW", 5)
+FS.set_crisp_output_value("MEDIUM", 25)
+FS.set_crisp_output_value("HIGH", 100)
+
+# Define fuzzy rules.
+rules = []
+for term in terms:
+    rules.append(f"IF (MemoryUsage IS {term}_memory) AND (ProcessorLoad IS {term}_load)"
+                 f" THEN (hwAvailable IS {term.upper()})")
+FS.add_rules(rules)
+
+FS.set_variable("MemoryUsage", 10)
+FS.set_variable("ProcessorLoad", 10)
+
+hwAvail_value = FS.Sugeno_inference(['hwAvailable'])['hwAvailable']
+print(hwAvail_value)
+# ----------------------------------------------------------------------------
+
+
+# 2o Fuzzyset,  network availability = bandwidth + latency---------------------------------------
+FS1 = sf.FuzzySystem()
+
+bandwidth_vars = [sf.FuzzySet(points=points_list[i], term=f"{terms[i]}_bandwidth")
+                  for i in range(3)]
+FS1.add_linguistic_variable("Bandwidth", sf.LinguisticVariable(bandwidth_vars))
+
+latency_vars = [sf.FuzzySet(points=points_list[i], term=f"{terms[i]}_latency")
+                for i in range(3)]
+FS1.add_linguistic_variable("Latency", sf.LinguisticVariable(latency_vars))
+
+FS1.set_crisp_output_value("LOW", 8)
+FS1.set_crisp_output_value("MEDIUM", 25)
+FS1.set_crisp_output_value("HIGH", 100)
+
+# Define fuzzy rules.
+rules1 = []
+for term in terms:
+    rules1.append(f"IF (Bandwidth IS {term}_bandwidth) AND (Latency IS {term}_latency) "
+                  f"THEN (netAvailable IS {term.upper()})")
+FS1.add_rules(rules1)
+
+FS1.set_variable("Bandwidth", 10)
+FS1.set_variable("Latency", 10)
+
+netAvail_value = FS1.Sugeno_inference(['netAvailable'])['netAvailable']
+print(netAvail_value)
+# --------------------------------------------------------------
+
+# agregacao dos fuzzysets, CLPV = Hardware availability + network availability -----------------------------
+hwAvail_vars = [sf.FuzzySet(points=[[0., 1], [30., 1], [60., 0]], term=f"hardwAvail")]
+netAvail_vars = [sf.FuzzySet(points=[[40., 0], [60., 1], [100., 1]], term=f"netwrkAvail")]
+
+aggr = sf.fuzzy_aggregation.FuzzyAggregator(verbose=True)
+
+aggr.add_variables(*hwAvail_vars, *netAvail_vars)
+
+aggr.set_variable("hardwAvail", hwAvail_value)
+aggr.set_variable("netwrkAvail", netAvail_value)
+
+CLPV = aggr.aggregate(["hardwAvail", "netwrkAvail"], aggregation_fun='arit_mean')
+print(CLPV)
