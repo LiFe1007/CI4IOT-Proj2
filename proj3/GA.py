@@ -4,7 +4,7 @@ import numpy as np
 from deap import algorithms, base, creator, tools
 
 # Load the distance matrix from an Excel file
-dist_df = pd.read_excel("../Project3_DistancesMatrix.xlsx", sheet_name="Sheet1", index_col=0)   # Best around 91
+dist_df = pd.read_excel("../Project3_DistancesMatrix.xlsx", sheet_name="Sheet1", index_col=0)  # Best around 91
 distance_matrix = dist_df.to_numpy()
 
 creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
@@ -12,7 +12,7 @@ creator.create("Individual", list, fitness=creator.FitnessMin)
 
 toolbox = base.Toolbox()
 # Attribute generator
-toolbox.register("indices", random.sample, range(1, len(distance_matrix)), len(distance_matrix)-1)
+toolbox.register("indices", random.sample, range(0, len(distance_matrix)), len(distance_matrix))
 # Structure initializers
 toolbox.register("individual", tools.initIterate, creator.Individual, toolbox.indices)
 toolbox.register("population", tools.initRepeat, list, toolbox.individual)
@@ -20,14 +20,15 @@ toolbox.register("population", tools.initRepeat, list, toolbox.individual)
 
 # Define the fitness function
 def fitness(path):
+    # Remove 0 from middle of path
+    a = list(path)
+    a.remove(0)
     # Calculate the sum of distances between consecutive positions
     dist = 0
-    for i in range(len(path) - 1):
-        dist += distance_matrix[path[i]][path[i + 1]]
+    for i in range(len(a) - 1):
+        dist += distance_matrix[a[i]][a[i + 1]]
 
-    # Add the distance from index 0 to the first and last elements of the path
-    dist += distance_matrix[0][path[0]] + distance_matrix[path[-1]][0]
-
+    dist += distance_matrix[0][a[0]] + distance_matrix[a[-1]][0]
     return dist,
 
 
@@ -37,6 +38,7 @@ toolbox.register("mutate", tools.mutShuffleIndexes, indpb=0.1)
 toolbox.register("select", tools.selTournament, tournsize=3)
 
 if __name__ == "__main__":
+    random.seed(42)
     # Initialize the population
     pop = toolbox.population(n=300)
 
@@ -78,7 +80,9 @@ if __name__ == "__main__":
 
     # Sort the population by fitness
     pop = sorted(pop, key=lambda ind: ind.fitness.values)
+    result = [[item for item in sublist if item != 0] for sublist in pop]
 
+    best_individual = [0] + result[0] + [0]
     # Print the best individual (path)
-    print("Path: ", pop[0])
+    print("Path: ", best_individual)
     print("Fitness: ", pop[0].fitness.values[0])
