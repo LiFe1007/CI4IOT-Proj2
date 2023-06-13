@@ -36,16 +36,19 @@ def creating_FS():
     fs.add_linguistic_variable("latency", sf.LinguisticVariable([L_1, L_2, L_3]))  # > 150ms
 
     PMU = AutoTriangle(3, terms=['low', 'medium', 'high'], universe_of_discourse=[-1, 1])
-    fs.add_linguistic_variable("predicted_memory_usage", PMU)
+    O_1 = sf.FuzzySet(points=[[-1., 1.], [-0.75, 1.], [-0.5, 0]], term="low")
+    O_2 = sf.FuzzySet(points=[[-0.5, 0], [-0.25, 1.], [0.25, 1], [0.5, 0]], term="medium")
+    O_3 = sf.FuzzySet(points=[[0.5, 0], [0.75, 1.], [1., 1.]], term="high")
+    fs.add_linguistic_variable("predicted_memory_usage", sf.LinguisticVariable([O_1, O_2, O_3]))
 
     PPL = AutoTriangle(3, terms=['low', 'medium', 'high'], universe_of_discourse=[-1, 1])
-    fs.add_linguistic_variable("predicted_processor_load", PPL)
+    fs.add_linguistic_variable("predicted_processor_load", sf.LinguisticVariable([O_1, O_2, O_3]))
 
     HA = AutoTriangle(3, terms=['low', 'medium', 'high'], universe_of_discourse=[-1, 1])
-    fs.add_linguistic_variable("hardware_availability", HA)
+    fs.add_linguistic_variable("hardware_availability", sf.LinguisticVariable([O_1, O_2, O_3]))
 
     NA = AutoTriangle(3, terms=['low', 'medium', 'high'], universe_of_discourse=[-1, 1])
-    fs.add_linguistic_variable("network_availability", NA)
+    fs.add_linguistic_variable("network_availability", sf.LinguisticVariable([O_1, O_2, O_3]))
 
     CLP_V = AutoTriangle(3, terms=['decrease', 'maintain', 'increase'], universe_of_discourse=[-1, 1])
     fs.add_linguistic_variable("CLPVariation", CLP_V)
@@ -53,7 +56,7 @@ def creating_FS():
     fs.set_crisp_output_value("low", -1)
     fs.set_crisp_output_value("medium", 0)
     fs.set_crisp_output_value("high", 1)
-
+    
     fs.set_crisp_output_value("decrease", -1)
     fs.set_crisp_output_value("maintain", 0)
     fs.set_crisp_output_value("increase", 1)
@@ -62,54 +65,87 @@ def creating_FS():
 
 
 def rules(fs):
-    #fs.add_rules([
-    #    "IF (available_bandwidth IS low) AND (latency IS high) THEN (network_availability IS low)",
-    #    "IF (available_bandwidth IS medium) AND (latency IS medium) THEN (network_availability IS medium)",
-    #    "IF (available_bandwidth IS high) AND (latency IS low) THEN (network_availability IS high)"
-    #])#
-    #fs.add_rules([
-    #    "IF (memory_usage_value IS increasing) AND (memory_usage IS low) THEN (predicted_memory_usage IS medium)",
-    #    "IF (memory_usage_value IS increasing) AND (memory_usage IS medium) THEN (predicted_memory_usage IS high)",
-    #    "IF (memory_usage_value IS increasing) AND (memory_usage IS high) THEN (predicted_memory_usage IS high)",
-#
-    #    "IF (memory_usage_value IS constant) AND (memory_usage IS low) THEN (predicted_memory_usage IS low)",
-    #    "IF (memory_usage_value IS constant) AND (memory_usage IS medium) THEN (predicted_memory_usage IS medium)",
-    #    "IF (memory_usage_value IS constant) AND (memory_usage IS high) THEN (predicted_memory_usage IS high)",
-#
-    #    "IF (memory_usage_value IS decreasing) AND (memory_usage IS low) THEN (predicted_memory_usage IS low)",
-    #    "IF (memory_usage_value IS decreasing) AND (memory_usage IS medium) THEN (predicted_memory_usage IS low)",
-    #    "IF (memory_usage_value IS decreasing) AND (memory_usage IS high) THEN (predicted_memory_usage IS medium)"
-    #])
-    #fs.add_rules([
-    #    "IF (processor_load_value IS increasing) AND (processor_load IS low) THEN (predicted_processor_load IS medium)",
-    #    "IF (processor_load_value IS increasing) AND (processor_load IS medium) THEN (predicted_processor_load IS high)",
-    #    "IF (processor_load_value IS increasing) AND (processor_load IS high) THEN (predicted_processor_load IS high)",
-#
-    #    "IF (processor_load_value IS constant) AND (processor_load IS low) THEN (predicted_processor_load IS low)",
-    #    "IF (processor_load_value IS constant) AND (processor_load IS medium) THEN (predicted_processor_load IS medium)",
-    #    "IF (processor_load_value IS constant) AND (processor_load IS high) THEN (predicted_processor_load IS high)",
-#
-    #    "IF (processor_load_value IS decreasing) AND (processor_load IS low) THEN (predicted_processor_load IS low)",
-    #    "IF (processor_load_value IS decreasing) AND (processor_load IS medium) THEN (predicted_processor_load IS low)",
-    #    "IF (processor_load_value IS decreasing) AND (processor_load IS high) THEN (predicted_processor_load IS medium)"
-    #])
-    #fs.add_rules([
-    #    "IF (predicted_memory_usage IS low) AND (predicted_processor_load IS high) THEN (hardware_availability IS medium)",
-    #    "IF (predicted_memory_usage IS high) AND (predicted_processor_load IS low) THEN (hardware_availability IS medium)",
-    #    "IF (predicted_memory_usage IS low) AND (predicted_processor_load IS low) THEN (hardware_availability IS low)",
-    #    "IF (predicted_memory_usage IS high) AND (predicted_processor_load IS high) THEN (hardware_availability IS high)"
-    #])
+    fs.add_rules([
+        "IF (available_bandwidth IS medium) AND (latency IS high) THEN (network_availability IS low)",
+        "IF (available_bandwidth IS medium) AND (latency IS medium) THEN (network_availability IS medium)",
+        "IF (available_bandwidth IS medium) AND (latency IS low) THEN (network_availability IS high)",
+
+        "IF (available_bandwidth IS high) AND (latency IS high) THEN (network_availability IS low)",
+        "IF (available_bandwidth IS high) AND (latency IS medium) THEN (network_availability IS medium)",
+        "IF (available_bandwidth IS high) AND (latency IS low) THEN (network_availability IS high)",
+
+        "IF (available_bandwidth IS low) AND (latency IS high) THEN (network_availability IS low)",
+        "IF (available_bandwidth IS low) AND (latency IS medium) THEN (network_availability IS low)",
+        "IF (available_bandwidth IS low) AND (latency IS low) THEN (network_availability IS medium)"
+    ])
+    fs.add_rules([
+        "IF (memory_usage_value IS increasing) AND (memory_usage IS low) THEN (predicted_memory_usage IS medium)",
+        "IF (memory_usage_value IS increasing) AND (memory_usage IS medium) THEN (predicted_memory_usage IS high)",
+        "IF (memory_usage_value IS increasing) AND (memory_usage IS high) THEN (predicted_memory_usage IS high)",
+
+        "IF (memory_usage_value IS constant) AND (memory_usage IS low) THEN (predicted_memory_usage IS low)",
+        "IF (memory_usage_value IS constant) AND (memory_usage IS medium) THEN (predicted_memory_usage IS medium)",
+        "IF (memory_usage_value IS constant) AND (memory_usage IS high) THEN (predicted_memory_usage IS high)",
+
+        "IF (memory_usage_value IS decreasing) AND (memory_usage IS low) THEN (predicted_memory_usage IS low)",
+        "IF (memory_usage_value IS decreasing) AND (memory_usage IS medium) THEN (predicted_memory_usage IS low)",
+        "IF (memory_usage_value IS decreasing) AND (memory_usage IS high) THEN (predicted_memory_usage IS medium)"
+    ])
+    fs.add_rules([
+        "IF (processor_load_value IS increasing) AND (processor_load IS low) THEN (predicted_processor_load IS medium)",
+        "IF (processor_load_value IS increasing) AND (processor_load IS medium) THEN (predicted_processor_load IS high)",
+        "IF (processor_load_value IS increasing) AND (processor_load IS high) THEN (predicted_processor_load IS high)",
+
+        "IF (processor_load_value IS constant) AND (processor_load IS low) THEN (predicted_processor_load IS low)",
+        "IF (processor_load_value IS constant) AND (processor_load IS medium) THEN (predicted_processor_load IS medium)",
+        "IF (processor_load_value IS constant) AND (processor_load IS high) THEN (predicted_processor_load IS high)",
+
+        "IF (processor_load_value IS decreasing) AND (processor_load IS low) THEN (predicted_processor_load IS low)",
+        "IF (processor_load_value IS decreasing) AND (processor_load IS medium) THEN (predicted_processor_load IS low)",
+        "IF (processor_load_value IS decreasing) AND (processor_load IS high) THEN (predicted_processor_load IS medium)"
+    ])
+    fs.add_rules([
+        "IF (predicted_memory_usage IS low) AND (predicted_processor_load IS high) THEN (hardware_availability IS medium)",
+        "IF (predicted_memory_usage IS high) AND (predicted_processor_load IS low) THEN (hardware_availability IS medium)",
+        "IF (predicted_memory_usage IS low) AND (predicted_processor_load IS low) THEN (hardware_availability IS low)",
+        "IF (predicted_memory_usage IS high) AND (predicted_processor_load IS high) THEN (hardware_availability IS high)"
+    ])
     fs.add_rules([
         "IF (network_availability IS high) AND (hardware_availability IS high) THEN (CLPVariation IS increase)",
         "IF (network_availability IS low) AND (hardware_availability IS low) THEN (CLPVariation IS maintain)",
         "IF ((network_availability IS high) OR (network_availability IS medium)) AND (hardware_availability IS low) THEN (CLPVariation IS decrease)",
 
-        "IF ((hardware_availability IS high) OR (hardware_availability IS medium)) THEN (CLPVariation IS increase)"
+        "IF ((hardware_availability IS high) OR (hardware_availability IS medium)) THEN (CLPVariation IS increase)",
     ])
 
 
 def graphs(fs):
-    # to plot surface if fuzzy not Sugeno
+    # fs.plot_surface = plot_surface_edited
+    FS.set_variable("available_bandwidth", 2)
+    FS.set_variable("latency", 80)
+
+    FS.set_variable("memory_usage", 50)
+    FS.set_variable("processor_load", 50)
+
+    FS.set_variable("memory_usage_value", 0)
+    FS.set_variable("processor_load_value", 0)
+
+    FS.set_variable("predicted_memory_usage", 0)
+    FS.set_variable("predicted_processor_load", 0)
+    FS.set_variable("network_availability", 0)
+    FS.set_variable("hardware_availability", 0)
+    FS.set_variable("CLPVariation", 0)
+
+    # res = fs.inference(["predicted_memory_usage", "predicted_processor_load"])
+    # FS.set_variable("predicted_memory_usage", res["predicted_memory_usage"])
+    # FS.set_variable("predicted_processor_load", res["predicted_processor_load"])
+    #
+    # res = fs.inference(["network_availability", "hardware_availability"])
+    # FS.set_variable("network_availability", res["network_availability"])
+    # FS.set_variable("hardware_availability", res["hardware_availability"])
+    #
+    # print(fs.inference(["hardware_availability", "network_availability", "CLPVariation"]))
+
     def plot_surface_edited(self, variables, output, detail=40, color_map="plasma"):
         """
         Plots the surface induced by the rules.
@@ -160,24 +196,44 @@ def graphs(fs):
         fig.tight_layout()
         return fig
 
-    # fs.plot_surface = plot_surface_edited
+    FS.plot_surface = plot_surface_edited
 
-    fs.plot_surface({"hardware_availability", "network_availability"}, "CLPVariation")
-
+    # fs.plot_surface(FS, {"hardware_availability", "network_availability"}, "CLPVariation")
     plt.show()
+
+
+def calculate(inputs):
+    CLPVariation = 0
+    FS.set_variable("available_bandwidth", inputs["available_bandwidth"])
+    FS.set_variable("latency", inputs["latency"])
+    FS.set_variable("memory_usage", inputs["memory_usage"])
+    FS.set_variable("processor_load", inputs["processor_load"])
+
+    FS.set_variable("memory_usage_value", inputs["memory_usage_value"])
+    FS.set_variable("processor_load_value", inputs["processor_load_value"])
+
+    FS.set_variable("predicted_memory_usage", inputs["memory_usage"])
+    FS.set_variable("predicted_processor_load", inputs["memory_usage"])
+    FS.set_variable("network_availability", inputs["memory_usage"])
+    FS.set_variable("hardware_availability", inputs["memory_usage"])
+
+    FS.set_variable("CLPVariation", inputs["memory_usage"])
+
+    return CLPVariation
 
 
 def results(df, FS):
     res = []
-    for idx, row in df.iterrows():  ##TO EDIT#################################################################
-        inputs = {'memory_usage': row['input1'], 'memory_usage_value': row['input1'], 'processor_load': row['input1'],
-                  'processor_load_value': row['input1'], 'available_bandwidth': row['input1'],
-                  'latency': row['input1'], }
-        output = FS.calculate(inputs)
+    for idx, row in df.iterrows():
+        inputs = {'memory_usage': row['MemoryUsage'], 'memory_usage_value': row['V_MemoryUsage'],
+                  'processor_load': row['ProcessorLoad'], 'processor_load_value': row['V_ProcessorLoad'],
+                  'available_bandwidth': row['OutBandwidth'], 'latency': row['Latency'], }
+        output = calculate(inputs)
         res.append(output)
 
     # Add the results to the DataFrame
-    df['CLPVariation'] = results
+    df['CLPVariation'] = res
+    print(df['CLPVariation'])
 
 
 if __name__ == '__main__':
@@ -185,4 +241,4 @@ if __name__ == '__main__':
     FS = creating_FS()
     rules(FS)
     graphs(FS)
-    # results(df, FS)
+    results(df, FS)
