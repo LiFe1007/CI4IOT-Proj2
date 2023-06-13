@@ -4,7 +4,12 @@ import numpy as np
 from deap import algorithms, base, creator, tools
 
 # Load the distance matrix from an Excel file
-dist_df = pd.read_excel("../Project3_DistancesMatrix.xlsx", sheet_name="Sheet1", index_col=0)  # Best around 91
+dist_df = pd.read_excel("../Project3_DistancesMatrix.xlsx", sheet_name="Sheet1", index_col=0)
+# Path:  [0, 43, 82, 79, 18, 53, 75, 73, 83, 86, 94, 95, 5, 40, 54, 9, 7, 46, 6, 59, 20, 41, 63, 66, 61, 26, 25, 68,
+# 48, 47, 49, 29, 15, 90, 78, 74, 51, 39, 91, 36, 85, 69, 62, 92, 31, 70, 16, 52, 23, 89, 19, 65, 10, 11, 84, 72, 12,
+# 30, 60, 1, 37, 35, 80, 21, 33, 81, 28, 55, 2, 96, 27, 76, 77, 64, 87, 58, 57, 45, 17, 34, 22, 4, 71, 99, 97, 32,
+# 88, 8, 50, 42, 38, 93, 24, 56, 13, 44, 98, 3, 14, 67, 0]
+# Fitness:  94.00000000000003
 distance_matrix = dist_df.to_numpy()
 
 creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
@@ -38,7 +43,7 @@ toolbox.register("mutate", tools.mutShuffleIndexes, indpb=0.1)
 toolbox.register("select", tools.selTournament, tournsize=3)
 
 if __name__ == "__main__":
-    random.seed(42)
+    # random.seed(42)
     # Initialize the population
     pop = toolbox.population(n=300)
 
@@ -46,7 +51,7 @@ if __name__ == "__main__":
     #       are crossed
     #
     # MUTPB is the probability for mutating an individual
-    CXPB, MUTPB, NGEN = 0.5, 0.2, 100
+    CXPB, MUTPB, NGEN = 0.5, 0.2, 10000
 
     # Run the GA
     for g in range(NGEN):
@@ -80,9 +85,8 @@ if __name__ == "__main__":
 
     # Sort the population by fitness
     pop = sorted(pop, key=lambda ind: ind.fitness.values)
-    result = [[item for item in sublist if item != 0] for sublist in pop]
 
-    best_individual = [0] + result[0] + [0]
+    best_individual = [0] + [item for item in pop[0] if item != 0] + [0]
     # Print the best individual (path)
     print("Path: ", best_individual)
     print("Fitness: ", pop[0].fitness.values[0])
