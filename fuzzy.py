@@ -1,52 +1,52 @@
 import simpful as sf
 
 
-def create_rules(terms, predMU_rules, predLoad_rules, netAvailb_rules):
+def create_rules():
     # Memory usage x Memory usage variation
     predMU_rules = [
-        f'IF (deltaMemUsage IS low_deltaMemUsage) AND (MemUsage IS low_MemUsage) THEN (pred_mem_usage IS LOW)'
-        f'IF (deltaMemUsage IS low_deltaMemUsage) AND (MemUsage IS medium_MemUsage) THEN (pred_mem_usage IS LOW)'
-        f'IF (deltaMemUsage IS low_deltaMemUsage) AND (MemUsage IS high_MemUsage) THEN (pred_mem_usage IS MEDIUM)'
+        f'IF (deltaMemUsage IS low_deltaMemUsage) AND (MemUsage IS low_MemUsage) THEN (predMemUsage IS LOW)'
+        f'IF (deltaMemUsage IS low_deltaMemUsage) AND (MemUsage IS medium_MemUsage) THEN (predMemUsage IS LOW)'
+        f'IF (deltaMemUsage IS low_deltaMemUsage) AND (MemUsage IS high_MemUsage) THEN (predMemUsage IS MEDIUM)'
 
-        f'IF (deltaMemUsage IS medium_deltaMemUsage) AND (MemUsage IS low_MemUsage) THEN (pred_mem_usage IS LOW)'
-        f'IF (deltaMemUsage IS medium_deltaMemUsage) AND (MemUsage IS medium_MemUsage) THEN (pred_mem_usage IS MEDIUM)'
-        f'IF (deltaMemUsage IS medium_deltaMemUsage) AND (MemUsage IS high_MemUsage) THEN (pred_mem_usage IS HIGH)'
+        f'IF (deltaMemUsage IS medium_deltaMemUsage) AND (MemUsage IS low_MemUsage) THEN (predMemUsage IS LOW)'
+        f'IF (deltaMemUsage IS medium_deltaMemUsage) AND (MemUsage IS medium_MemUsage) THEN (predMemUsage IS MEDIUM)'
+        f'IF (deltaMemUsage IS medium_deltaMemUsage) AND (MemUsage IS high_MemUsage) THEN (predMemUsage IS HIGH)'
 
-        f'IF (deltaMemUsage IS high_deltaMemUsage) AND (MemUsage IS low_MemUsage) THEN (pred_mem_usage IS MEDIUM)'
-        f'IF (deltaMemUsage IS high_deltaMemUsage) AND (MemUsage IS medium_MemUsage) THEN (pred_mem_usage IS HIGH)'
-        f'IF (deltaMemUsage IS high_deltaMemUsage) AND (MemUsage IS high_MemUsage) THEN (pred_mem_usage IS HIGH)'
+        f'IF (deltaMemUsage IS high_deltaMemUsage) AND (MemUsage IS low_MemUsage) THEN (predMemUsage IS MEDIUM)'
+        f'IF (deltaMemUsage IS high_deltaMemUsage) AND (MemUsage IS medium_MemUsage) THEN (predMemUsage IS HIGH)'
+        f'IF (deltaMemUsage IS high_deltaMemUsage) AND (MemUsage IS high_MemUsage) THEN (predMemUsage IS HIGH)'
     ]
 
     # Processor load x Processor load variation
     predLoad_rules = [
-        f'IF (deltaLoad IS low_deltaLoad) AND (Load IS low_Load) THEN (predicted_processor_load IS LOW)'
-        f'IF (deltaLoad IS low_deltaLoad) AND (Load IS medium_Load) THEN (predicted_processor_load IS LOW)'
-        f'IF (deltaLoad IS low_deltaLoad) AND (Load IS high_Load) THEN (predicted_processor_load IS MEDIUM)'
+        f'IF (deltaLoad IS low_deltaLoad) AND (Load IS low_Load) THEN (predLoad IS LOW)'
+        f'IF (deltaLoad IS low_deltaLoad) AND (Load IS medium_Load) THEN (predLoad IS LOW)'
+        f'IF (deltaLoad IS low_deltaLoad) AND (Load IS high_Load) THEN (predLoad IS MEDIUM)'
 
-        f'IF (deltaLoad IS medium_deltaLoad) AND (Load IS low_Load) THEN (pred_processor_load IS LOW)'
-        f'IF (deltaLoad IS medium_deltaLoad) AND (Load IS medium_Load) THEN (pred_processor_load IS MEDIUM)'
-        f'IF (deltaLoad IS medium_deltaLoad) AND (Load IS high_Load) THEN (pred_processor_load IS HIGH)'
+        f'IF (deltaLoad IS medium_deltaLoad) AND (Load IS low_Load) THEN (predLoad IS LOW)'
+        f'IF (deltaLoad IS medium_deltaLoad) AND (Load IS medium_Load) THEN (predLoad IS MEDIUM)'
+        f'IF (deltaLoad IS medium_deltaLoad) AND (Load IS high_Load) THEN (predLoad IS HIGH)'
 
-        f'IF (deltaLoad IS high_deltaLoad) AND (Load IS low_Load) THEN (pred_processor_load IS MEDIUM)'
-        f'IF (deltaLoad IS high_deltaLoad) AND (Load IS medium_Load) THEN (pred_processor_load IS HIGH)'
-        f'IF (deltaLoad IS high_deltaLoad) AND (Load IS high_Load) THEN (pred_processor_load IS HIGH)'
+        f'IF (deltaLoad IS high_deltaLoad) AND (Load IS low_Load) THEN (predLoad IS MEDIUM)'
+        f'IF (deltaLoad IS high_deltaLoad) AND (Load IS medium_Load) THEN (predLoad IS HIGH)'
+        f'IF (deltaLoad IS high_deltaLoad) AND (Load IS high_Load) THEN (predLoad IS HIGH)'
     ]
 
     # Bandwidth x Latency
     netAvailb_rules = [
-        f'IF (Bandwidth IS low_Bandwidth) AND (Latency IS high_Latency) THEN (network_availability IS LOW)'
-        f'IF (Bandwidth IS medium_Bandwidth) AND (Latency IS medium_Latency) THEN (network_availability IS MEDIUM)'
-        f'IF (Bandwidth IS high_Bandwidth) AND (Latency IS low_Latency) THEN (network_availability IS HIGH)'
+        f'IF (Bandwidth IS low_Bandwidth) AND (Latency IS high_Latency) THEN (netAvailb IS LOW)'
+        f'IF (Bandwidth IS medium_Bandwidth) AND (Latency IS medium_Latency) THEN (netAvailb IS MEDIUM)'
+        f'IF (Bandwidth IS high_Bandwidth) AND (Latency IS low_Latency) THEN (netAvailb IS HIGH)'
     ]
 
     """
     
     # Predicted processor load x Predicted memory usage
     hwAvailb_rules = [
-        f'IF (predicted_memory_usage IS low) AND (predicted_processor_load IS high) THEN (hardware_availability IS medium)'
-        f'IF (predicted_memory_usage IS high) AND (predicted_processor_load IS low) THEN (hardware_availability IS medium)'
-        f'IF (predicted_memory_usage IS low) AND (predicted_processor_load IS low) THEN (hardware_availability IS low)'
-        f'IF (predicted_memory_usage IS high) AND (predicted_processor_load IS high) THEN (hardware_availability IS high'
+        f'IF (predicted_memory_usage IS low) AND (predLoad IS high) THEN (hwAvailb IS medium)'
+        f'IF (predicted_memory_usage IS high) AND (predLoad IS low) THEN (hwAvailb IS medium)'
+        f'IF (predicted_memory_usage IS low) AND (predLoad IS low) THEN (hwAvailb IS low)'
+        f'IF (predicted_memory_usage IS high) AND (predLoad IS high) THEN (hwAvailb IS high'
     ]
 
     # Hardware availability x Network availability
@@ -84,11 +84,11 @@ def set_rules(fuzz_dict):
     for fuzz_key in fuzz_dict:
         fuzz_dict[fuzz_key][4].add_rules(fuzz_dict[fuzz_key][6])
 
+    return fuzz_dict
+
 
 def aggregate_fuzzies(aggr_dict):
-
     for fuzz_key in aggr_dict:
-        print(f'OLAAAA = {aggr_dict[fuzz_key][0]}')
         fuzzy_one_vars = [sf.FuzzySet(points=aggr_dict[fuzz_key][0], term=f'{aggr_dict[fuzz_key][3]}')]
         fuzzy_two_vars = [sf.FuzzySet(points=aggr_dict[fuzz_key][1], term=f'{aggr_dict[fuzz_key][4]}')]
 
@@ -98,7 +98,8 @@ def aggregate_fuzzies(aggr_dict):
         aggr.set_variable(aggr_dict[fuzz_key][3], aggr_dict[fuzz_key][5])
         aggr.set_variable(aggr_dict[fuzz_key][4], aggr_dict[fuzz_key][6])
 
-        aggr_dict[fuzz_key][2] = aggr.aggregate([aggr_dict[fuzz_key][3], aggr_dict[fuzz_key][4]], aggregation_fun='arit_mean')
+        aggr_dict[fuzz_key][2] = aggr.aggregate([aggr_dict[fuzz_key][3], aggr_dict[fuzz_key][4]],
+                                                aggregation_fun='arit_mean')
 
     return aggr_dict
 
@@ -154,42 +155,50 @@ if __name__ == '__main__':
     FS_Load = sf.FuzzySystem()
     FS_netAvailb = sf.FuzzySystem()
 
-    # 1st round
-    predMU_rules = []
-    predLoad_rules = []
-    netAvailb_rules = []
+    # just creating output variables 4 each fuzzy
+    pMU_result = 0
+    pLoad_result = 0
+    netAvailb_result = 0
 
-    # 2nd round (aggregation)
-    hwAvailb_rules = []
-
-    # final round (2nd round's aggregation)
-    clpv_rules = []
-
-    create_rules(terms, predMU_rules, predLoad_rules, netAvailb_rules)
+    predMU_rules, predLoad_rules, netAvailb_rules = create_rules()
 
     # Legenda do dicionario =
     # 'key' : Fuzzy_name_1, Fuzzy_name_2, points_list_1, points_list_2, sf.FuzzySystem(),
-    # output function or value for low medium high, rules
+    # output function or value for low medium high, rules, output value result
     first_dict = {
-        'predMemUsage': ['MemUsage', 'deltaMemUsage', MU_pnts_list, pMU_pnts_list, FS_MU, [5, 25, 100], predMU_rules],
-        'predLoad': ['Load', 'deltaLoad', Load_pnts_list, deltaLoad_pnts_list, FS_Load, [7, 27, 98], predLoad_rules],
-        'netAvailb': ['Bandwidth', 'Latency', BW_pnts_list, Ltncy_pnts_list, FS_netAvailb, [8, 28, 97], netAvailb_rules]
+        'predMemUsage': ['MemUsage', 'deltaMemUsage', MU_pnts_list, pMU_pnts_list, FS_MU, [5, 25, 100], predMU_rules,
+                         pMU_result],
+        'predLoad': ['Load', 'deltaLoad', Load_pnts_list, deltaLoad_pnts_list, FS_Load, [7, 27, 98], predLoad_rules,
+                     pLoad_result],
+        'netAvailb': ['Bandwidth', 'Latency', BW_pnts_list, Ltncy_pnts_list, FS_netAvailb, [8, 28, 97], netAvailb_rules,
+                      netAvailb_result]
     }
 
     create_fuzzies(first_dict, terms)
     set_rules(first_dict)
 
+    for fuzzkey in first_dict:
+        first_dict[fuzzkey][4].set_variable(first_dict[fuzzkey][0], 10)
+        first_dict[fuzzkey][4].set_variable(first_dict[fuzzkey][1], 10)
+
+        # first_dict[fuzzkey][7] = first_dict[fuzzkey][4].Sugeno_inference([fuzzkey])[fuzzkey]
+        first_dict[fuzzkey][4].Sugeno_inference([fuzzkey])
+
+
+    # Agregattion--------------------------------------------------------------------
+
     FS_HW = sf.fuzzy_aggregation.FuzzyAggregator()
     FS_CLPV = sf.FuzzySystem()
 
-    # mudar isto amanha
-    sugeno1 = 10
-    sugeno2 = 32
-
-    aggregated_dict = {
-        'hwAvailb': [hw_pnts_list_1, hw_pnts_list_2, FS_HW, 'predMemUsage', 'predLoad', sugeno1, sugeno2],
-
-        'CLPV': [clpv_pnts_list_1, clpv_pnts_list_2, FS_CLPV, 'hwAvailb', 'netAvailb', sugeno1, sugeno2]
+    aggregated_dict_1 = {
+        'hwAvailb': [hw_pnts_list_1, hw_pnts_list_2, FS_HW, 'predMemUsage', 'predLoad', first_dict['predMemUsage'][7],
+                     first_dict['predLoad'][7]]
     }
 
-    aggregate_fuzzies(aggregated_dict)
+    aggregated_dict_final = {
+        'CLPV': [clpv_pnts_list_1, clpv_pnts_list_2, FS_CLPV, 'hwAvailb', 'netAvailb', first_dict['netAvailb'][7],
+                 aggregated_dict_1['hwAvailb'][6]]
+    }
+
+    aggregate_fuzzies(aggregated_dict_1)
+    aggregate_fuzzies(aggregated_dict_final)
