@@ -4,38 +4,38 @@ import simpful as sf
 def create_rules():
     # Memory usage x Memory usage variation
     predMU_rules = [
-        f'IF (deltaMemUsage IS low_deltaMemUsage) AND (MemUsage IS low_MemUsage) THEN (predMemUsage IS LOW)'
-        f'IF (deltaMemUsage IS low_deltaMemUsage) AND (MemUsage IS medium_MemUsage) THEN (predMemUsage IS LOW)'
-        f'IF (deltaMemUsage IS low_deltaMemUsage) AND (MemUsage IS high_MemUsage) THEN (predMemUsage IS MEDIUM)'
+        f'IF (deltaMemUsage IS low_deltaMemUsage) AND (MemUsage IS low_MemUsage) THEN (predMemUsage IS LOW)',
+        f'IF (deltaMemUsage IS low_deltaMemUsage) AND (MemUsage IS medium_MemUsage) THEN (predMemUsage IS LOW)',
+        f'IF (deltaMemUsage IS low_deltaMemUsage) AND (MemUsage IS high_MemUsage) THEN (predMemUsage IS MEDIUM)',
 
-        f'IF (deltaMemUsage IS medium_deltaMemUsage) AND (MemUsage IS low_MemUsage) THEN (predMemUsage IS LOW)'
-        f'IF (deltaMemUsage IS medium_deltaMemUsage) AND (MemUsage IS medium_MemUsage) THEN (predMemUsage IS MEDIUM)'
-        f'IF (deltaMemUsage IS medium_deltaMemUsage) AND (MemUsage IS high_MemUsage) THEN (predMemUsage IS HIGH)'
+        f'IF (deltaMemUsage IS medium_deltaMemUsage) AND (MemUsage IS low_MemUsage) THEN (predMemUsage IS LOW)',
+        f'IF (deltaMemUsage IS medium_deltaMemUsage) AND (MemUsage IS medium_MemUsage) THEN (predMemUsage IS MEDIUM)',
+        f'IF (deltaMemUsage IS medium_deltaMemUsage) AND (MemUsage IS high_MemUsage) THEN (predMemUsage IS HIGH)',
 
-        f'IF (deltaMemUsage IS high_deltaMemUsage) AND (MemUsage IS low_MemUsage) THEN (predMemUsage IS MEDIUM)'
-        f'IF (deltaMemUsage IS high_deltaMemUsage) AND (MemUsage IS medium_MemUsage) THEN (predMemUsage IS HIGH)'
+        f'IF (deltaMemUsage IS high_deltaMemUsage) AND (MemUsage IS low_MemUsage) THEN (predMemUsage IS MEDIUM)',
+        f'IF (deltaMemUsage IS high_deltaMemUsage) AND (MemUsage IS medium_MemUsage) THEN (predMemUsage IS HIGH)',
         f'IF (deltaMemUsage IS high_deltaMemUsage) AND (MemUsage IS high_MemUsage) THEN (predMemUsage IS HIGH)'
     ]
 
     # Processor load x Processor load variation
     predLoad_rules = [
-        f'IF (deltaLoad IS low_deltaLoad) AND (Load IS low_Load) THEN (predLoad IS LOW)'
-        f'IF (deltaLoad IS low_deltaLoad) AND (Load IS medium_Load) THEN (predLoad IS LOW)'
-        f'IF (deltaLoad IS low_deltaLoad) AND (Load IS high_Load) THEN (predLoad IS MEDIUM)'
+        f'IF (deltaLoad IS low_deltaLoad) AND (Load IS low_Load) THEN (predLoad IS LOW)',
+        f'IF (deltaLoad IS low_deltaLoad) AND (Load IS medium_Load) THEN (predLoad IS LOW)',
+        f'IF (deltaLoad IS low_deltaLoad) AND (Load IS high_Load) THEN (predLoad IS MEDIUM)',
 
-        f'IF (deltaLoad IS medium_deltaLoad) AND (Load IS low_Load) THEN (predLoad IS LOW)'
-        f'IF (deltaLoad IS medium_deltaLoad) AND (Load IS medium_Load) THEN (predLoad IS MEDIUM)'
-        f'IF (deltaLoad IS medium_deltaLoad) AND (Load IS high_Load) THEN (predLoad IS HIGH)'
+        f'IF (deltaLoad IS medium_deltaLoad) AND (Load IS low_Load) THEN (predLoad IS LOW)',
+        f'IF (deltaLoad IS medium_deltaLoad) AND (Load IS medium_Load) THEN (predLoad IS MEDIUM)',
+        f'IF (deltaLoad IS medium_deltaLoad) AND (Load IS high_Load) THEN (predLoad IS HIGH)',
 
-        f'IF (deltaLoad IS high_deltaLoad) AND (Load IS low_Load) THEN (predLoad IS MEDIUM)'
-        f'IF (deltaLoad IS high_deltaLoad) AND (Load IS medium_Load) THEN (predLoad IS HIGH)'
+        f'IF (deltaLoad IS high_deltaLoad) AND (Load IS low_Load) THEN (predLoad IS MEDIUM)',
+        f'IF (deltaLoad IS high_deltaLoad) AND (Load IS medium_Load) THEN (predLoad IS HIGH)',
         f'IF (deltaLoad IS high_deltaLoad) AND (Load IS high_Load) THEN (predLoad IS HIGH)'
     ]
 
     # Bandwidth x Latency
     netAvailb_rules = [
-        f'IF (Bandwidth IS low_Bandwidth) AND (Latency IS high_Latency) THEN (netAvailb IS LOW)'
-        f'IF (Bandwidth IS medium_Bandwidth) AND (Latency IS medium_Latency) THEN (netAvailb IS MEDIUM)'
+        f'IF (Bandwidth IS low_Bandwidth) AND (Latency IS high_Latency) THEN (netAvailb IS LOW)',
+        f'IF (Bandwidth IS medium_Bandwidth) AND (Latency IS medium_Latency) THEN (netAvailb IS MEDIUM)',
         f'IF (Bandwidth IS high_Bandwidth) AND (Latency IS low_Latency) THEN (netAvailb IS HIGH)'
     ]
 
@@ -43,9 +43,9 @@ def create_rules():
     
     # Predicted processor load x Predicted memory usage
     hwAvailb_rules = [
-        f'IF (predicted_memory_usage IS low) AND (predLoad IS high) THEN (hwAvailb IS medium)'
-        f'IF (predicted_memory_usage IS high) AND (predLoad IS low) THEN (hwAvailb IS medium)'
-        f'IF (predicted_memory_usage IS low) AND (predLoad IS low) THEN (hwAvailb IS low)'
+        f'IF (predicted_memory_usage IS low) AND (predLoad IS high) THEN (hwAvailb IS medium)',
+        f'IF (predicted_memory_usage IS high) AND (predLoad IS low) THEN (hwAvailb IS medium)',
+        f'IF (predicted_memory_usage IS low) AND (predLoad IS low) THEN (hwAvailb IS low)',
         f'IF (predicted_memory_usage IS high) AND (predLoad IS high) THEN (hwAvailb IS high'
     ]
 
